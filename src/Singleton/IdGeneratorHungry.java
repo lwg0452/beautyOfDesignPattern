@@ -1,4 +1,4 @@
-package singleton;
+package Singleton;
 
 import java.util.concurrent.atomic.AtomicLong;
 // Lazy Initialization 懒汉式

@@ -1,4 +1,5 @@
 # 桥接模式 (Bridge Design Pattern)
+四个角色：抽象部分 (Abstraction)、实现部分接口 (Implementor)、具体实现部分 (Concrete Implementor)、扩展抽象部分 (Refined Abstraction)。
 
 第一种理解：将抽象和实现解耦，让它们可以独立变化。
 例子：JDBC 驱动
@@ -18,3 +19,7 @@ JDBC 是一个类库，这个类库调用 Driver 接口完成对数据库的操�
 
 
 示例代码为第二种理解方式，程序入口：Car.java
+抽象部分 (Abstraction)： AbstractCar
+实现部分接口 (Implementor)： Brand、Transmission
+具体实现部分 (Concrete Implementor)： Audi、BMW 和 Benz 类实现了 Brand 接口，AutoTransmission、ManualTransmission 和 SemiAutoTransmission 类实现了 Transmission 接口。
+扩展抽象部分 (Refined Abstraction)： Car 类继承了 AbstractCar 类，是扩展抽象部分。

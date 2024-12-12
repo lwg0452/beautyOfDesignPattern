@@ -1,18 +1,15 @@
 package Bridge;
 
-public class Car {
-
-    private Brand brand;
-    private Transmission transmission;
+public class Car extends AbstractCar{
 
     public Car(Brand brand, Transmission transmission) {
-        this.brand = brand;
-        this.transmission = transmission;
+        super(brand, transmission);
     }
 
+    @Override
     public void showCar() {
-        brand.showBrand();
-        transmission.showTransmission();
+        this.brand.showBrand();
+        this.transmission.showTransmission();
     }
 
     public static void main(String[] args) {

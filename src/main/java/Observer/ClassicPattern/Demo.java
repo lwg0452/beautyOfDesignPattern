@@ -1,0 +1,13 @@
+package Observer.ClassicPattern;
+
+public class Demo {
+
+    public static void main(String[] args) {
+
+        Subject subject = new ConcreteSubject();
+        subject.addObserver(new ConcreteObserverOne());
+        subject.addObserver(new ConcreteObserverTwo());
+
+        subject.notifyObservers(new Message("Hello World"));
+    }
+}

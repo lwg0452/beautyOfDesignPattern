@@ -2,6 +2,7 @@ package Observer.MyEventBus;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -16,29 +17,19 @@ public class ObserverRegistry {
 
     // 找到 object 中标记了@Subscribe的方法，注册到registry中
     public void register(Object observer) {
-
-        // 1. 获取 object 的方法列表
-        Method[] methods = observer.getClass().getMethods();
-        for (Method method : methods) {
-            // 2. 找出标有 @Subscribe 注解的方法
-            if (!method.isAnnotationPresent(Subscribe.class)) {
-                continue;
+        Map<Class<?>, Collection<ObserverAction>> observerActions = findAllObserverActions(observer);
+        for (Map.Entry<Class<?>, Collection<ObserverAction>> entry : observerActions.entrySet()) {
+            Class<?> eventType = entry.getKey();
+            Collection<ObserverAction> actions = entry.getValue();
+            if (!registry.containsKey(eventType)) {
+                registry.put(eventType, new CopyOnWriteArraySet<>());
             }
-            // 3. 获取方法的第一个参数
-            Class<?>[] parameterTypes = method.getParameterTypes();
-            if (parameterTypes.length != 1) {
-                continue;
-            }
-            Class<?> type = parameterTypes[0];
-            ObserverAction action = new ObserverAction(observer, method);
-            // 4. 添加到set
-            CopyOnWriteArraySet<ObserverAction> observers = new CopyOnWriteArraySet<>();
-            if (registry.containsKey(type)) {
-                observers.addAll(registry.get(type));
-            }
-            observers.add(action);
-            registry.put(type, observers);
+            registry.get(eventType).addAll(actions);
         }
+    }
+
+    private Map<Class<?>, Collection<ObserverAction>> findAllObserverActions(Object observer) {
+        return null;
     }
 
     // 移除registry中的

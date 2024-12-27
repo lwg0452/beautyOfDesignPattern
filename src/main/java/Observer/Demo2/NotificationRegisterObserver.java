@@ -1,6 +1,6 @@
 package Observer.Demo2;
 
-import com.google.common.eventbus.Subscribe;
+import Observer.MyEventBus.Subscribe;
 
 public class NotificationRegisterObserver {
 

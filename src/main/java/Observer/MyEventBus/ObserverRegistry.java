@@ -1,5 +1,6 @@
 package Observer.MyEventBus;
 
+import com.google.common.base.Preconditions;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,7 +30,32 @@ public class ObserverRegistry {
     }
 
     private Map<Class<?>, Collection<ObserverAction>> findAllObserverActions(Object observer) {
-        return null;
+        Map<Class<?>, Collection<ObserverAction>> observerActions = new ConcurrentHashMap<>();
+        Class<?> clazz = observer.getClass();
+        for (Method method : getAnnotatedMethods(clazz)) {
+            Class<?>[] parameterTypes = method.getParameterTypes();
+            Class<?> eventType = parameterTypes[0];
+            if (!observerActions.containsKey(eventType)) {
+                observerActions.put(eventType, new ArrayList<>());
+            }
+            observerActions.get(eventType).add(new ObserverAction(observer, method));
+        }
+        return observerActions;
+    }
+
+    private List<Method> getAnnotatedMethods(Class<?> clazz) {
+        List<Method> annotatedMethods = new ArrayList<>();
+        for (Method method : clazz.getDeclaredMethods()) {
+            if (!method.isAnnotationPresent(Subscribe.class)) {
+                continue;
+            }
+            Class<?>[] parameterTypes = method.getParameterTypes();
+            Preconditions.checkArgument(parameterTypes.length == 1,
+                    "Method %s has @Subscribe annotation but has %s parameters."
+                            + "Subscriber methods must have exactly 1 parameter.");
+            annotatedMethods.add(method);
+        }
+        return annotatedMethods;
     }
 
     // 移除registry中的

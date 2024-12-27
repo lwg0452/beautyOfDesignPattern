@@ -1,21 +1,20 @@
 package Observer.Demo2;
 
-import com.google.common.eventbus.AsyncEventBus;
-import com.google.common.eventbus.EventBus;
+
+import Observer.MyEventBus.EventBus;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class UserController {
 
 
-//    private EventBus eventBus;  // 同步阻塞
-    private AsyncEventBus eventBus;  // 异步非阻塞
+    private EventBus eventBus;  // 同步阻塞
+//    private AsyncEventBus eventBus;  // 异步非阻塞
     private static final int DEFAULT_EVENTBUS_THREAD_POOL_SIZE = 10;
 
     public UserController() {
-        this.eventBus = new AsyncEventBus(Executors.newFixedThreadPool(DEFAULT_EVENTBUS_THREAD_POOL_SIZE));
+//        this.eventBus = new AsyncEventBus(Executors.newFixedThreadPool(DEFAULT_EVENTBUS_THREAD_POOL_SIZE));
+        this.eventBus = new EventBus();
     }
 
     public void setRegisterObserver(List<Object> observers) {
